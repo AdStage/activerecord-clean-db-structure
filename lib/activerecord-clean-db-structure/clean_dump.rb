@@ -112,7 +112,7 @@ module ActiveRecordCleanDbStructure
           dump
             .scan(/^CREATE.+INDEX.+ON.+\n/)
             .group_by { |line| line.scan(/\b\w+\.\w+\b/).first }
-            .transform_values(&:join)
+            .each_with_object({}) { |(key, value), memo| memo[key] = value.join }
 
         dump.gsub!(/^CREATE( UNIQUE)? INDEX \w+ ON .+\n+/, '')
         dump.gsub!(/^-- Name: \w+; Type: INDEX\n+/, '')
